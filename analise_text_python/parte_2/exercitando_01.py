@@ -1,3 +1,7 @@
+# Exercitando 01 - Parte 2
+# Autor: Newmar Wegner
+# Date: 16/02/2021
+
 import os
 import docx
 import nltk
