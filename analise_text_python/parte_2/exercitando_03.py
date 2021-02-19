@@ -40,13 +40,8 @@ def commum_vocabulary(vocabularies):
     vocabularies_set = []
     for i in vocabularies:
         vocabularies_set.append(set(i))
-        
-    if len(vocabularies) == 2:
-        return vocabularies_set[0] & vocabularies_set[1]
-    elif len(vocabularies) == 3:
-        return vocabularies_set[0] & vocabularies_set[1] & vocabularies_set[2]
-    elif len(vocabularies) == 3:
-        return vocabularies_set[0] & vocabularies_set[1] & vocabularies_set[2] & vocabularies_set[3]
+    
+    return vocabularies_set[0].intersection(*vocabularies_set)
 
 def response_vocabulary():
     print(f'{len(commum_vocabulary(vocabularies))} ocorrências comuns registradas.')
@@ -61,18 +56,24 @@ files = {"Dom Casmurro": ['romance/marm08.txt',15],
 
 if __name__ == '__main__':
     vocabularies = []
+    ## 1.
+    print(machado.readme())
+    ## 2.
     for item in files.items():
+        ## 2.a
         print(f'Generating POS from book {item[0]} a partir do paragrafo {item[1][1]}')
         pos_tag = gen_pos(item[1][0],item[1][1])
         vocabularies.append(pos_tag)
         to_csv(pd.DataFrame(pos_tag),f'Newmar_POS_{item[0]}')
-        print(pd.DataFrame(pos_tag).value_counts())
+        ## 2.b
         print(f'Generating NER from book {item[0]} a partir do paragrafo {item[1][1]}')
         ner = gen_ner(pos_tag)
         to_csv(pd.DataFrame(ner),f'Newmar_NER_{item[0]}')
+        ## 2.c
+        print(pd.DataFrame(pos_tag).value_counts())
         print(pd.DataFrame(ner).value_counts())
-        print()
-        print('#############################################################')
-        print()
+        ## 2.d procedimento já ajustado na função gen_pos(arq,start_paragraph)
+    
+    ## 2.e
     print('Vocabulários comuns:')
     response_vocabulary()
