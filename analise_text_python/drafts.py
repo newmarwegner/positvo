@@ -79,47 +79,47 @@ print(stem_text_rslp)
 # Exemplo 04
 # pos - part of speach
 
-import nltk
-import pandas as pd
-import numpy as np
-from nltk import word_tokenize
-# nltk.download('maxent_ne_chunker')
-nltk.download('words')
-# nltk.download('averaged_perceptron_tagger')
-text_e = f'Apple acquires Zoom in China on wednesday 6th may 2020. This news has made Apple and Google stock jump by ' \
-         f'5% in the United States of America.'
-
-text_p = f'Apple adquire Zoom na China na quinta-feira 6 de maio de 2020. Essa notícia fez as ações da Apple e da G' \
-         f'oogle subirem 5% nos Estados Unidos.'
-
-tokens_e = word_tokenize(text_e)
-tokens_pt = word_tokenize(text_p)
-
-pos_tags = nltk.pos_tag(tokens_e)
-
-# criando chuncks
-chuncks = nltk.ne_chunk(pos_tags,binary=True)
-for c in chuncks:
-    print(c)
-    
-# recuperar as entidades do texto
-entidades = []
-rotulos = []
-
-for c in chuncks:
-    if hasattr(c, 'label'):
-        entidades.append(' '.join(elemento[0] for elemento in c))
-        rotulos.append(c.label())
-
-print( '#######################')
-print('NER - resultado')
-
-entidades_com_rotulos = list(set(zip(entidades,rotulos)))
-print(entidades_com_rotulos)
-
-
-entitidades_df = pd.DataFrame(entidades_com_rotulos)
-
-
-entitidades_df.columns=['Entidades','Rotulos']
-print(entitidades_df)
+# import nltk
+# import pandas as pd
+# import numpy as np
+# from nltk import word_tokenize
+# # nltk.download('maxent_ne_chunker')
+# nltk.download('words')
+# # nltk.download('averaged_perceptron_tagger')
+# text_e = f'Apple acquires Zoom in China on wednesday 6th may 2020. This news has made Apple and Google stock jump by ' \
+#          f'5% in the United States of America.'
+#
+# text_p = f'Apple adquire Zoom na China na quinta-feira 6 de maio de 2020. Essa notícia fez as ações da Apple e da G' \
+#          f'oogle subirem 5% nos Estados Unidos.'
+#
+# tokens_e = word_tokenize(text_e)
+# tokens_pt = word_tokenize(text_p)
+#
+# pos_tags = nltk.pos_tag(tokens_e)
+#
+# # criando chuncks
+# chuncks = nltk.ne_chunk(pos_tags,binary=True)
+# for c in chuncks:
+#     print(c)
+#
+# # recuperar as entidades do texto
+# entidades = []
+# rotulos = []
+#
+# for c in chuncks:
+#     if hasattr(c, 'label'):
+#         entidades.append(' '.join(elemento[0] for elemento in c))
+#         rotulos.append(c.label())
+#
+# print( '#######################')
+# print('NER - resultado')
+#
+# entidades_com_rotulos = list(set(zip(entidades,rotulos)))
+# print(entidades_com_rotulos)
+#
+#
+# entitidades_df = pd.DataFrame(entidades_com_rotulos)
+#
+#
+# entitidades_df.columns=['Entidades','Rotulos']
+# print(entitidades_df)
