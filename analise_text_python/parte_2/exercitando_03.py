@@ -7,16 +7,19 @@ import nltk
 import os
 from nltk.corpus import machado
 import pandas as pd
+nltk.download('stopwords')
 
 def gen_pos(arq,start_paragraph):
     list_text = machado.sents(arq)[start_paragraph:]
     words = []
-    to_clean = [';',',','[',':', '\'','.','...',
-                    '?',']', '!','/','-'] # a option could be use string.punctuation
+    to_clean = ['*','A','O','D','E','\x93','\x97',';',',','[',':', '\'','.','...',
+                    '?',']', '!','/','-','(',')'] # a option could be use string.punctuation
+    stopwords = nltk.corpus.stopwords.words('portuguese')
+
     for paragraph in list_text:
         words.extend(paragraph)
     
-    cleaned_words = [cw for cw in words if cw not in to_clean]
+    cleaned_words = [cw for cw in words if cw not in to_clean and cw not in stopwords]
     
     return nltk.pos_tag(nltk.word_tokenize(' '.join(cleaned_words)))
 
@@ -50,6 +53,14 @@ def response_vocabulary():
     
     return
 
+def frequency_most_commom(pos_tag,n_most_common):
+    freqdist = nltk.FreqDist(pos_tag)
+    
+    return freqdist.most_common(n_most_common)
+
+def frequency_both(vocabularies,n_most_commom):
+    pass
+
 files = {"Dom Casmurro": ['romance/marm08.txt',15],
          "O Alienista": ['contos/macn003.txt',7]}
 
@@ -73,7 +84,9 @@ if __name__ == '__main__':
         print(pd.DataFrame(pos_tag).value_counts())
         print(pd.DataFrame(ner).value_counts())
         ## 2.d procedimento já ajustado na função gen_pos(arq,start_paragraph)
-    
+        ## 2.f
+        print(frequency_most_commom(pos_tag,10))
     ## 2.e
     print('Vocabulários comuns:')
     response_vocabulary()
+    print(frequency_both(vocabularies,10))
