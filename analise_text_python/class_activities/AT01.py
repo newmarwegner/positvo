@@ -39,7 +39,6 @@ for p in doc.paragraphs:
 
 first_paragraph = first_paragraph[0]
 
-
 # generating pos
 stopwords = nltk.corpus.stopwords.words('portuguese')
 words_fp = nltk.word_tokenize(first_paragraph)

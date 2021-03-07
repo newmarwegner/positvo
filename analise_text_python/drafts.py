@@ -123,3 +123,26 @@ print(stem_text_rslp)
 #
 # entitidades_df.columns=['Entidades','Rotulos']
 # print(entitidades_df)
+
+
+## Processos com spaCy
+## Utiliza redes neurais para processamento
+# 1 - instalar o spacy pip installl
+# 2 - baixar o modelo do idioma em questap
+
+import spacy
+nlp = spacy.load("pt_core_news_sm")
+
+texto = 'Apple adqure Zoom na China na quinta-feira 6 de maio de 2020. Essa notícia fez as ações.'
+
+doc = nlp(texto)
+print(doc.text)
+for token in doc:
+    print(token.text,token.pos_,token.dep_)
+
+
+'''Exercicio para ainda serem realizados
+Rever exercitando03_parte_2
+Resumos e palavras-chave da página da Wikipedia ("Usina de Itaipu")
+Nuvem de palavras da página da Wikipedia
+'''
