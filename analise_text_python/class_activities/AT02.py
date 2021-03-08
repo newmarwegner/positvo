@@ -1,21 +1,19 @@
-# Resumos e palavras-chave da página da Wikipedia ("Usina de Itaipu")
-# Nuvem de palavras da página da Wikipedia
-# Install package pt_core_news_sm with command python -m spacy download pt_core_news_sm
+# Atividade em aula - AT02
+# Autor: Newmar Wegner
+# Date: 05/03/2021
+
+# Needs install package pt_core_news_sm with command python -m spacy download pt_core_news_sm
 
 import spacy
 import matplotlib.pyplot as plt
 import wikipedia
 from gensim.summarization import keywords
 from gensim.summarization.summarizer import summarize
-from nltk import tokenize
+from nltk import tokenize, sent_tokenize
 from nltk.corpus import stopwords
 from wordcloud import WordCloud
-import os
 
 # Get token text, pos and dep
-
-
-
 def token_spacy(doc):
     classified = []
     for token in doc:
@@ -67,11 +65,14 @@ def generate_wordcloud(text):
 
     return plt.show()
 
+
+
 if __name__ == '__main__':
     nlp = spacy.load('pt_core_news_sm')
     text = f'Google Notícias é um agregador de notícias e aplicativo desenvolvido pela Google. ' \
            f'Ele apresenta um fluxo contínuo e personalizável de artigos organizados a partir de ' \
-           f'milhares de editores e revistas.'
+           f'milhares de editores e revistas.' \
+
     doc = nlp(text)
     print(f"Resultando palavras e suas classes: \n {token_spacy(doc)}")
     print(f'Entidades obtidas: \n {entities(doc)}')
