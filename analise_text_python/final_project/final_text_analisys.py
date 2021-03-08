@@ -1,21 +1,16 @@
-# Projeto final de módulo (peso 50%):
-# Tarefa: Analisar textos.
-# Os textos baixados podem estar relacionados com um
-# interesse da equipe, mas devem ser baixadas, no mínimo,
-# 50.000 (cinquenta mil sentenças).
-# Para a análise, deve-se produzir:
-#
-
-# Qual é a proporção de pronomes frente aos verbos do texto?
-# Nuvem de palavras
-# Obtenha um resumo dos textos utilizados, acompanhados das palavras-chave
+# Projeto final de módulo (peso 50%)
+# Autor: Newmar Wegner, Paulo Gamero, Kleberson Nascimento
+# Date: 15/03/2021
 
 import nltk
 import matplotlib.pyplot as plt
 import spacy
+from gensim.summarization import summarize, keywords
 from nltk import tokenize
 from nltk.corpus import stopwords
 from collections import Counter
+from wordcloud import WordCloud
+
 # nltk.download('tagsets')
 
 # Get count of sentences
@@ -27,7 +22,7 @@ def getwords(text):
     tokens = tokenize.word_tokenize(text)
     stopwords_pt = stopwords.words('portuguese')
     my_stop_w = [',', '[', ':', '\'', '.', '...',
-                 '?', ']', '!', '/', '-', "''"]
+                 '?', ']', '!', '/', '-', "''",';','(',')']
 
     return [p for p in tokens if ((p not in stopwords_pt) and (p not in my_stop_w))]
 
@@ -90,21 +85,78 @@ def count_locals(entities_local):
 # Get Counts of pronoum and verbs in text
 def count_pron_verbs(content):
     pos_tag = nltk.pos_tag(content)
+    class_words = Counter(i[1] for i in pos_tag)
 
-    return Counter(i[1] for i in pos_tag)
+    pron_verbs = [['VB',0],['NN',0]]
+    for i in class_words.items():
+        if i[0].startswith('NN'):
+            pron_verbs[1][1] += i[1]
+        elif i[0].startswith('VB'):
+            pron_verbs[0][1] += i[1]
+    
+    return pron_verbs
+
+# Get wordcloud
+def generate_wordcloud(text):
+    wordcloud = WordCloud(width=800, height=400, relative_scaling=1.0, stopwords={'to', 'of', 'us'}).generate(text)
+    plt.axis('off')
+    plt.imshow(wordcloud)
+    plt.savefig('WordCloud.png')
+
+    return plt.show()
+
+# Get keywords
+def get_keys(filter_words):
+
+    return keywords(filter_words, ratio=0.05, pos_filter=('NN'), words=5)
+
+
+# Create summarize with keywords
+def summ_key(text):
+    
+    return summarize(text, ratio=0.05), get_keys(' '.join(getwords(text)))
+
+
 if __name__ == '__main__':
-    text = f'Google Notícias em São Paulo é um agregador de notícias e aplicativo desenvolvido pela Google. ' \
-           f'Ele foi atirar apresentando um fluxo no Everest contínuo e personalizável de artigos organizados a partir de ' \
-           f'milhares de Everest editores e revistas contínuo contínuo'
-
+    text = f'A pele, é o maior órgão do corpo humano, reveste e delimita o organismo. Reflete condições físicas e ' \
+           f'psicológicas, como saúde, idade, diferenças étnicas e culturais. Desempenha importantes funções como a ' \
+           f'proteção, excreção, termorregulação e percepções sensoriais. É composta por duas camadas distintas: a ' \
+           f'epiderme,a camada mais superficial, constituída por um epitélio estratificado pavimentoso queratinizado, ' \
+           f'e a derme, constituída por diversos tipos celulares, fibras colágenas e elásticas mergulhadas em uma ' \
+           f'matriz extracelular onde também se situam os vasos e nervos; e, abaixo da pele encontra-se a hipoderme, ' \
+           f'onde predomina o tecido adiposo, que une os órgãos subjacentes. Para restabelecer a integridade funcional,' \
+           f' inicia-se um processo complexo Desempenha para a cicatrização da ferida e sua capacidade de reparação é muito ' \
+           f'importante para a sobrevivência do indivíduo. Adiabetes influencia em diferentes etapas da cicatrização ' \
+           f'de feridas, incluindo hemostasia e inflamação, deposição da matriz e angiogênese. No final do século XIX, ' \
+           f'foi aplicada Arquivos do MUDI. A própolis éuma substância resinosa produzida por abelhas, a partir das ' \
+           f'plantas como botões florais, exsudatos, brotos e pólen, que são modificadas pelas ações das secreções ' \
+           f'salivares e enzimáticas, secretadas pelo metabolismo glandular desses insetos, imunoestimulatória ' \
+           f'. Os flavonóides são os principais compostos com atividade farmacológica encontradosna própolis. ' \
+           f'Atuam no processo de reparação tecidual, agem como antioxidantes, combatendo os radicais livres'
+    # Contagem de sentenças
     print(f'O texto possui {count_sentences(text)} sentenças.')
+    
+    # Vocabulario e frequência de palavras relevantes
     content = getwords(text)
-    # fdist, vocabulary, most_commum = get_frequencies(content)
-    # print(vocabulary)
-    # print(most_commum)
-    # plotting(most_commum,'Palavras')'
-    # plotting(trigrams(content), 'Trigramas')
-    # entities_local = entities(text,'LOC')
-    # print(count_locals(entities_local))
+    fdist, vocabulary, most_commum = get_frequencies(content)
+    print(vocabulary)
+    print(most_commum)
+    # Grafico das palavras mais relevantes e trigramas relevantes
+    plotting(most_commum,'Palavras')
+    plotting(trigrams(content), 'Trigramas')
+    
+    # Entidades LOC e count dessas entidades
+    entities_local = entities(text,'LOC')
+    print(entities_local)
+    print(count_locals(entities_local))
+    
+    # Count de pronome e verbos no texto
     print(count_pron_verbs(content))
-    print(nltk.help.upenn_tagset('NN'))
+    
+    # WorldCloud
+    generate_wordcloud(text)
+    
+    # Resumo e palavras chaves
+    summ_ , keys = summ_key(text)
+    print(summ_)
+    print(keys)
