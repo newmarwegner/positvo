@@ -129,20 +129,37 @@ print(stem_text_rslp)
 ## Utiliza redes neurais para processamento
 # 1 - instalar o spacy pip installl
 # 2 - baixar o modelo do idioma em questap
+#
+# import spacy
+# nlp = spacy.load("pt_core_news_sm")
+#
+# texto = 'Apple adqure Zoom na China na quinta-feira 6 de maio de 2020. Essa notícia fez as ações.'
+#
+# doc = nlp(texto)
+# print(doc.text)
+# for token in doc:
+#     print(token.text,token.pos_,token.dep_)
+import os
 
-import spacy
-nlp = spacy.load("pt_core_news_sm")
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 
-texto = 'Apple adqure Zoom na China na quinta-feira 6 de maio de 2020. Essa notícia fez as ações.'
+def generate_wordcloud(text):
+    wordcloud = WordCloud(width=800, height=400, relative_scaling=1.0, stopwords={'to', 'of', 'us'}).generate(text)
+    plt.axis('off')
+    plt.imshow(wordcloud)
+    plt.savefig('WordCloud.png')
 
-doc = nlp(texto)
-print(doc.text)
-for token in doc:
-    print(token.text,token.pos_,token.dep_)
-
+    return plt.show()
 
 '''Exercicio para ainda serem realizados
 Rever exercitando03_parte_2
 Resumos e palavras-chave da página da Wikipedia ("Usina de Itaipu")
 Nuvem de palavras da página da Wikipedia
 '''
+
+ # Create wordcloud
+arq = open('territorio','r')
+text = arq.read()
+
+generate_wordcloud(text)

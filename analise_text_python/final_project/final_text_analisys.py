@@ -2,9 +2,12 @@
 # Autor: Newmar Wegner, Paulo Gamero, Kleberson Nascimento
 # Date: 15/03/2021
 
+import os
+import re
 import nltk
 import matplotlib.pyplot as plt
 import spacy
+from PyPDF2 import PdfFileReader
 from gensim.summarization import summarize, keywords
 from nltk import tokenize
 from nltk.corpus import stopwords
@@ -13,15 +16,29 @@ from wordcloud import WordCloud
 
 # nltk.download('tagsets')
 
+
+# Get text from pdf book
+def read_book():
+    arq = open(os.path.dirname(os.getcwd())+'/final_project/sensing.pdf','rb')
+    read_pdf = PdfFileReader(arq)
+    text = []
+    for i in range(21,read_pdf.getNumPages()-1):
+        text.append(read_pdf.getPage(i).extractText())
+    return '\n'.join(text)
+
 # Get count of sentences
 def count_sentences(text):
     return len(nltk.sent_tokenize(text))
 
 # Get tokenized words with stopwords applied
 def getwords(text):
-    tokens = tokenize.word_tokenize(text)
+    
+    tokens = tokenize.word_tokenize(text.lower())
     stopwords_pt = stopwords.words('portuguese')
-    my_stop_w = [',', '[', ':', '\'', '.', '...',
+    regular = re.compile(r'(?<!\S)[A-Za-z]+(?!\S)|(?<!\S)[A-Za-z]+(?=:(?!\S))')
+    tokens = filter(regular.match,tokens)
+    
+    my_stop_w = ['=', ',', '[', ':', '\'', '.', '...','x','b',
                  '?', ']', '!', '/', '-', "''",';','(',')']
 
     return [p for p in tokens if ((p not in stopwords_pt) and (p not in my_stop_w))]
@@ -114,25 +131,28 @@ def get_keys(filter_words):
 # Create summarize with keywords
 def summ_key(text):
     
-    return summarize(text, ratio=0.05), get_keys(' '.join(getwords(text)))
+    return summarize(text, ratio=0.15), get_keys(' '.join(getwords(text)))
 
 
 if __name__ == '__main__':
-    text = f'A pele, é o maior órgão do corpo humano, reveste e delimita o organismo. Reflete condições físicas e ' \
-           f'psicológicas, como saúde, idade, diferenças étnicas e culturais. Desempenha importantes funções como a ' \
-           f'proteção, excreção, termorregulação e percepções sensoriais. É composta por duas camadas distintas: a ' \
-           f'epiderme,a camada mais superficial, constituída por um epitélio estratificado pavimentoso queratinizado, ' \
-           f'e a derme, constituída por diversos tipos celulares, fibras colágenas e elásticas mergulhadas em uma ' \
-           f'matriz extracelular onde também se situam os vasos e nervos; e, abaixo da pele encontra-se a hipoderme, ' \
-           f'onde predomina o tecido adiposo, que une os órgãos subjacentes. Para restabelecer a integridade funcional,' \
-           f' inicia-se um processo complexo Desempenha para a cicatrização da ferida e sua capacidade de reparação é muito ' \
-           f'importante para a sobrevivência do indivíduo. Adiabetes influencia em diferentes etapas da cicatrização ' \
-           f'de feridas, incluindo hemostasia e inflamação, deposição da matriz e angiogênese. No final do século XIX, ' \
-           f'foi aplicada Arquivos do MUDI. A própolis éuma substância resinosa produzida por abelhas, a partir das ' \
-           f'plantas como botões florais, exsudatos, brotos e pólen, que são modificadas pelas ações das secreções ' \
-           f'salivares e enzimáticas, secretadas pelo metabolismo glandular desses insetos, imunoestimulatória ' \
-           f'. Os flavonóides são os principais compostos com atividade farmacológica encontradosna própolis. ' \
-           f'Atuam no processo de reparação tecidual, agem como antioxidantes, combatendo os radicais livres'
+    # text = f'A pele, é o maior órgão do corpo humano, reveste e delimita o organismo. Reflete condições físicas e ' \
+    #        f'psicológicas, como saúde, idade, diferenças étnicas e culturais. Desempenha importantes funções como a ' \
+    #        f'proteção, excreção, termorregulação e percepções sensoriais. É composta por duas camadas distintas: a ' \
+    #        f'epiderme,a camada mais superficial, constituída por um epitélio estratificado pavimentoso queratinizado, ' \
+    #        f'e a derme, constituída por diversos tipos celulares, fibras colágenas e elásticas mergulhadas em uma ' \
+    #        f'matriz extracelular onde também se situam os vasos e nervos; e, abaixo da pele encontra-se a hipoderme, ' \
+    #        f'onde predomina o tecido adiposo, que une os órgãos subjacentes. Para restabelecer a integridade funcional,' \
+    #        f' inicia-se um processo complexo Desempenha para a cicatrização da ferida e sua capacidade de reparação é muito ' \
+    #        f'importante para a sobrevivência do indivíduo. Adiabetes influencia em diferentes etapas da cicatrização ' \
+    #        f'de feridas, incluindo hemostasia e inflamação, deposição da matriz e angiogênese. No final do século XIX, ' \
+    #        f'foi aplicada Arquivos do MUDI. A própolis éuma substância resinosa produzida por abelhas, a partir das ' \
+    #        f'plantas como botões florais, exsudatos, brotos e pólen, que são modificadas pelas ações das secreções ' \
+    #        f'salivares e enzimáticas, secretadas pelo metabolismo glandular desses insetos, imunoestimulatória ' \
+    #        f'. Os flavonóides são os principais compostos com atividade farmacológica encontradosna própolis. ' \
+    #        f'Atuam no processo de reparação tecidual, agem como antioxidantes, combatendo os radicais livres'
+    
+    # text = read_book()
+    text = read_book()
     # Contagem de sentenças
     print(f'O texto possui {count_sentences(text)} sentenças.')
     
