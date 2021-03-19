@@ -74,7 +74,7 @@ for palavra in tokens:
 print('Porter rslp')
 print(stem_text_rslp)
 
-'''
+
 
 # Exemplo 04
 # pos - part of speach
@@ -152,14 +152,53 @@ def generate_wordcloud(text):
 
     return plt.show()
 
-'''Exercicio para ainda serem realizados
+Exercicio para ainda serem realizados
 Rever exercitando03_parte_2
 Resumos e palavras-chave da página da Wikipedia ("Usina de Itaipu")
 Nuvem de palavras da página da Wikipedia
-'''
+
 
  # Create wordcloud
 arq = open('territorio','r')
 text = arq.read()
 
 generate_wordcloud(text)
+'''
+
+####################### Machine learning #############################################
+import os
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn import metrics
+from scipy.spatial.distance import euclidean, cdist
+
+iris = pd.read_csv(os.path.dirname(__file__) + '/machine_learning/datasets/iris.csv')
+x0 = iris.iloc[:, 0]
+x1 = iris.iloc[:, 1]
+x2 = iris.iloc[:, 2]
+x3 = iris.iloc[:, 3]
+y = iris.iloc[:, 4]
+## extraindo variavéis explicativas
+x = np.array(iris.iloc[:, 0:4])
+### maneira do professor
+# x = np.array(list(zip(x0, x1,x2,x3))).reshape(len(x0),4)
+# print(x)
+# cluster = KMeans(n_clusters=3).fit(x)
+# print(cluster.cluster_centers_)
+
+distortions = []
+for k in range(1, 11):
+    kmeansmodel = KMeans(n_clusters=k).fit(x)
+    distortions.append(
+        sum(np.min(
+            cdist(x, kmeansmodel.cluster_centers_, 'euclidean'), axis=1
+        )) / x.shape[0])
+
+fig, ax = plt.subplots()
+ax.plot(range(1, 11), distortions)
+ax.set(xlabel='Clusters',ylabel='Distorção',title='Método Elbow')
+plt.savefig('plot')
+plt.show()
