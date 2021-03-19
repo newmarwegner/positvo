@@ -135,6 +135,7 @@ def summ_key(text):
 
 
 if __name__ == '__main__':
+    '''Texto utilizado para teste. Se utilizado é necessário comentar a linha 156'''
     # text = f'A pele, é o maior órgão do corpo humano, reveste e delimita o organismo. Reflete condições físicas e ' \
     #        f'psicológicas, como saúde, idade, diferenças étnicas e culturais. Desempenha importantes funções como a ' \
     #        f'proteção, excreção, termorregulação e percepções sensoriais. É composta por duas camadas distintas: a ' \
@@ -151,7 +152,7 @@ if __name__ == '__main__':
     #        f'. Os flavonóides são os principais compostos com atividade farmacológica encontradosna própolis. ' \
     #        f'Atuam no processo de reparação tecidual, agem como antioxidantes, combatendo os radicais livres'
     
-    # text = read_book()
+    
     text = read_book()
     # Contagem de sentenças
     print(f'O texto possui {count_sentences(text)} sentenças.')

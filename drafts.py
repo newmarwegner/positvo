@@ -189,16 +189,33 @@ x = np.array(iris.iloc[:, 0:4])
 # cluster = KMeans(n_clusters=3).fit(x)
 # print(cluster.cluster_centers_)
 
+# distortions = []
+# for k in range(1, 11):
+#     kmeansmodel = KMeans(n_clusters=k).fit(x)
+#     distortions.append(
+#         sum(np.min(
+#             cdist(x, kmeansmodel.cluster_centers_, 'euclidean'), axis=1
+#         )) / x.shape[0])
+#
+# fig, ax = plt.subplots()
+# ax.plot(range(1, 11), distortions)
+# ax.set(xlabel='Clusters',ylabel='Distorção',title='Método Elbow')
+# plt.savefig('plot')
+# plt.show()
+
+
+####################### com inercia##############################################3
+
+
 distortions = []
 for k in range(1, 11):
     kmeansmodel = KMeans(n_clusters=k).fit(x)
-    distortions.append(
-        sum(np.min(
-            cdist(x, kmeansmodel.cluster_centers_, 'euclidean'), axis=1
-        )) / x.shape[0])
+    distortions.append(kmeansmodel.inertia_)
 
 fig, ax = plt.subplots()
 ax.plot(range(1, 11), distortions)
-ax.set(xlabel='Clusters',ylabel='Distorção',title='Método Elbow')
-plt.savefig('plot')
+ax.set(xlabel='Clusters',ylabel='Distorção',title='Método Inertial')
+plt.savefig('Inertial')
 plt.show()
+
+
