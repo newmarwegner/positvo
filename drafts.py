@@ -166,23 +166,23 @@ generate_wordcloud(text)
 '''
 
 ####################### Machine learning #############################################
-import os
-
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
-from sklearn import metrics
-from scipy.spatial.distance import euclidean, cdist
-
-iris = pd.read_csv(os.path.dirname(__file__) + '/machine_learning/datasets/iris.csv')
-x0 = iris.iloc[:, 0]
-x1 = iris.iloc[:, 1]
-x2 = iris.iloc[:, 2]
-x3 = iris.iloc[:, 3]
-y = iris.iloc[:, 4]
-## extraindo variavéis explicativas
-x = np.array(iris.iloc[:, 0:4])
+# import os
+#
+# import pandas as pd
+# import numpy as np
+# import matplotlib.pyplot as plt
+# from sklearn.cluster import KMeans
+# from sklearn import metrics
+# from scipy.spatial.distance import euclidean, cdist
+#
+# iris = pd.read_csv(os.path.dirname(__file__) + '/machine_learning/datasets/iris.csv')
+# x0 = iris.iloc[:, 0]
+# x1 = iris.iloc[:, 1]
+# x2 = iris.iloc[:, 2]
+# x3 = iris.iloc[:, 3]
+# y = iris.iloc[:, 4]
+# ## extraindo variavéis explicativas
+# x = np.array(iris.iloc[:, 0:4])
 ### maneira do professor
 # x = np.array(list(zip(x0, x1,x2,x3))).reshape(len(x0),4)
 # print(x)
@@ -207,15 +207,48 @@ x = np.array(iris.iloc[:, 0:4])
 ####################### com inercia##############################################3
 
 
-distortions = []
-for k in range(1, 11):
-    kmeansmodel = KMeans(n_clusters=k).fit(x)
-    distortions.append(kmeansmodel.inertia_)
+# distortions = []
+# for k in range(1, 11):
+#     kmeansmodel = KMeans(n_clusters=k).fit(x)
+#     distortions.append(kmeansmodel.inertia_)
+#
+# fig, ax = plt.subplots()
+# ax.plot(range(1, 11), distortions)
+# ax.set(xlabel='Clusters',ylabel='Distorção',title='Método Inertial')
+# plt.savefig('Inertial')
+# plt.show()
 
-fig, ax = plt.subplots()
-ax.plot(range(1, 11), distortions)
-ax.set(xlabel='Clusters',ylabel='Distorção',title='Método Inertial')
-plt.savefig('Inertial')
-plt.show()
+####################### normalização #############################################3
+import os
+import pandas as pd
+import sklearn
+from sklearn import preprocessing
 
+df = pd.read_csv(os.path.dirname(__file__) + '/machine_learning/datasets/dados_normalizar.csv', sep=';')
+# print(df.head())
 
+#1. obter o vetor de valores não numéricos
+#1.1 Segmentar as colunas que são numéricas, para normalização quantitativa
+df_num = df.drop(columns=['sexo'])
+df_categories = df['sexo']
+# print(df_num)
+# print(df_categories)
+#1.2 Obter o vetor numérico a partir dos dados que são numéricos
+df_num.x = df_num.values
+# print(df_num.x)
+# 2 Normalização utilizando o método min max manualmente
+#Z = (x - min(dados)/max(dados)-min(dados))
+df_num_norm_minmax = (df_num - df_num.min())/(df_num.max()-df_num.min())
+# print(df_num_norm)
+
+# 2 Normalização utilizando o método média anual
+# Z = (x - media(atributo)/ desvio padrão do atributo
+df_num_norm_mean = (df_num - df_num.mean())/df_num.std()
+# print(df_num_norm_mean)
+
+# 3 Utilizando MinMaxScaler()
+# 3.1 Criar um normalizador
+normalizador = preprocessing.MinMaxScaler()
+df_num_norm_model= normalizador.fit(df_num)
+df_num_norm_scaler = normalizador.fit_transform(df_num)
+print(df_num_norm_scaler)
