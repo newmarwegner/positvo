@@ -36,7 +36,7 @@ def kmeans_distance(x, steps):
     fig, ax = plt.subplots()
     ax.plot(range(1, steps), distortions)
     ax.set(xlabel='Clusters',ylabel='Distorção',title='Método Elbow-Dist')
-    plt.savefig('Kmeans_distance_plot')
+    plt.savefig('results/Kmeans_distance_plot')
     plt.show()
 
     return distortions

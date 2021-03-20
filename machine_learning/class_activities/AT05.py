@@ -16,7 +16,9 @@ import os
 import numpy as np
 import pandas as pd
 from pickle import load
-
+pd.set_option('display.max_rows', 500)
+pd.set_option('display.max_columns', 500)
+pd.set_option('display.width', 1000)
 
 def norm_new_dataset(model_trasform, new_values):
     return model_transform.transform(pd.DataFrame(new_values))
@@ -24,6 +26,7 @@ def norm_new_dataset(model_trasform, new_values):
 
 if __name__ == '__main__':
     df = pd.read_csv(os.path.dirname(__file__) + '/../datasets/BostonHousing.csv', sep=';')
+    print(df.describe())
     model_transform = load(open('results/MinMaxScaler_model_boston.pkl', 'rb'))
     new_values = np.array([[0.03237, 0, 2.18, 0, 0.458, 6.998, 45.8, 6.0622, 3, 222, 18.7, 394.63, 2.94, 33.4],
                            ])
