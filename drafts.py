@@ -221,34 +221,59 @@ generate_wordcloud(text)
 ####################### normalização #############################################3
 import os
 import pandas as pd
+import numpy as np
 import sklearn
 from sklearn import preprocessing
+from pickle import dump, load
 
 df = pd.read_csv(os.path.dirname(__file__) + '/machine_learning/datasets/dados_normalizar.csv', sep=';')
 # print(df.head())
 
-#1. obter o vetor de valores não numéricos
-#1.1 Segmentar as colunas que são numéricas, para normalização quantitativa
+# 1. obter o vetor de valores não numéricos
+# 1.1 Segmentar as colunas que são numéricas, para normalização quantitativa
 df_num = df.drop(columns=['sexo'])
 df_categories = df['sexo']
 # print(df_num)
 # print(df_categories)
-#1.2 Obter o vetor numérico a partir dos dados que são numéricos
+# 1.2 Obter o vetor numérico a partir dos dados que são numéricos
 df_num.x = df_num.values
 # print(df_num.x)
 # 2 Normalização utilizando o método min max manualmente
-#Z = (x - min(dados)/max(dados)-min(dados))
-df_num_norm_minmax = (df_num - df_num.min())/(df_num.max()-df_num.min())
+# Z = (x - min(dados)/max(dados)-min(dados))
+df_num_norm_minmax = (df_num - df_num.min()) / (df_num.max() - df_num.min())
 # print(df_num_norm)
 
 # 2 Normalização utilizando o método média anual
 # Z = (x - media(atributo)/ desvio padrão do atributo
-df_num_norm_mean = (df_num - df_num.mean())/df_num.std()
+df_num_norm_mean = (df_num - df_num.mean()) / df_num.std()
 # print(df_num_norm_mean)
 
 # 3 Utilizando MinMaxScaler()
 # 3.1 Criar um normalizador
 normalizador = preprocessing.MinMaxScaler()
-df_num_norm_model= normalizador.fit(df_num)
+df_num_norm_model = normalizador.fit(df_num)
+#exportar o normalizador em arquivo
+dump(df_num_norm_model, open('../MinMaxScaler_model.pkl','wb'))
 df_num_norm_scaler = normalizador.fit_transform(df_num)
-print(df_num_norm_scaler)
+# print(df_num_norm_scaler)
+
+# Normalizar dados Categóricos
+df_categories_norm = pd.get_dummies(df_categories, prefix='sexo')
+# print(df_categories_norm)
+
+# Incorporar elementos normalizados  para um dataframe
+# convertendo numpy array to pd.dataframe
+df_num_norm_scaler = pd.DataFrame(df_num_norm_scaler, columns=['idade', 'altura', 'peso'])
+# juntando dataframe
+# print(pd.concat([df_num_norm_scaler,df_categories_norm], axis=1))
+# maneira do professor
+dados_finais = df_num_norm_scaler.join(df_categories_norm, how='left')
+dados_finais.to_csv('../dados_norma.csv', index=False, sep=';')
+
+## carregando o modelo normalizador
+model_transform = load(open('../MinMaxScaler_model.pkl','rb'))
+novos_valores = np.array([[24,2,85],[74,1,62]])
+novas_instancias = pd.DataFrame(novos_valores,columns=['idade','altura','peso'])
+novas_instancias_norm = model_transform.transform(novas_instancias)
+print(novas_instancias)
+print(novas_instancias_norm)
