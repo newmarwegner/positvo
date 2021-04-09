@@ -217,7 +217,7 @@ generate_wordcloud(text)
 # ax.set(xlabel='Clusters',ylabel='Distorção',title='Método Inertial')
 # plt.savefig('Inertial')
 # plt.show()
-
+'''
 ####################### normalização #############################################3
 import os
 import pandas as pd
@@ -277,3 +277,5 @@ novas_instancias = pd.DataFrame(novos_valores,columns=['idade','altura','peso'])
 novas_instancias_norm = model_transform.transform(novas_instancias)
 print(novas_instancias)
 print(novas_instancias_norm)
+'''
+

@@ -23,3 +23,4 @@ if __name__ == '__main__':
     opt = optimal_number_of_clusters(wcss)
     kmeansmodel = KMeans(n_clusters=opt, random_state=1).fit(df)
     dump(kmeansmodel, open('results/modelclusterfertility.pkl','wb'))
+
