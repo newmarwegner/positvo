@@ -1,10 +1,10 @@
-# Atividade em aula - AT09
+# Atividade em aula - AT10
 # Autor: Newmar Wegner
 # Date: 10/04/2021
 
 """
 ATIVIDADE
-1. Usando o modelo salvo para fertility, criar um progama para predições
+1. Usando o modelo salvo para fertility, criar um programa para predições
 """
 from pickle import load
 
