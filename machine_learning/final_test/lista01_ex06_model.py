@@ -1,4 +1,4 @@
-# Atividade final do módulo - EX06
+# Atividade final do módulo - EX06 model
 # Autor: Newmar Wegner, Paulo, Kleberson
 # Date: 23/05/2021
 
@@ -42,7 +42,7 @@ def balance_data(final_data,class_column):
 
 # Function to save model
 def save_model(model):
-    return dump(model, open(f'./result_ft/model.pkl', 'wb'))
+    return dump(model, open(f'./result_ft/model_bank.pkl', 'wb'))
 
 if __name__ == '__main__':
     # Input parameters
@@ -55,10 +55,11 @@ if __name__ == '__main__':
 
     # Get dummies to categorical dataset
     norm_categorical = normalize_data_dummies(categorical)
-
+    
     # Join norm_categorical with numerical dataset to normalize with minmax scaler
-    dados = numerical.join(norm_categorical, how='left')
-    model, df_transformed = normalize_data_minmax(dados)
+    model, num_normalize = normalize_data_minmax(numerical)
+    num_normalize = pd.DataFrame(num_normalize, columns=numerical.columns)
+    dados = num_normalize.join(norm_categorical, how='left')
 
     # Saving normalizer
     dump(model, open(f'../datasets/MinMaxScaler_bank.pkl', 'wb'))
@@ -85,5 +86,3 @@ if __name__ == '__main__':
 
     # Save model
     save_model(rf_bank)
-
-# TODO: Realizar a parte de inferência
