@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
+from pickle import dump
 np.set_printoptions(suppress=True)
 
 # Function to find optimal group clusters
@@ -48,3 +49,5 @@ if __name__ == '__main__':
     opt = optimal_number_of_clusters(wcss)
     # gerando o modelo com o numero ideal e salvando em uma variável
     kmeansmodel = KMeans(n_clusters=opt, random_state=1).fit(x)
+    # salvando modelo
+    dump(kmeansmodel, open('./result_ft/modelclusterfertility.pkl','wb'))
