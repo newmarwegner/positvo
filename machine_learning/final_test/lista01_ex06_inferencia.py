@@ -62,6 +62,7 @@ if __name__ == '__main__':
     model_norm, num_normalize = normalize_data_minmax(numerical)
     num_normalize = pd.DataFrame(num_normalize, columns=numerical.columns)
     dados = num_normalize.join(norm_categorical, how='left')
+    print(dados)
 
     # Load model and make predictions
     rf = load(open("./result_ft/model_bank.pkl",'rb'))
