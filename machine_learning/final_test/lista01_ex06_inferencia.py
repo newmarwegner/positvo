@@ -1,15 +1,11 @@
 # Atividade final do módulo - EX06 inferência
 # Autor: Newmar Wegner, Paulo, Kleberson
 # Date: 23/05/2021
-import os
-from pickle import dump, load
-import pandas as pd
-from imblearn.over_sampling import SMOTE
-from sklearn import preprocessing, metrics
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-import numpy as np
 
+
+import pandas as pd
+from sklearn import preprocessing
+from pickle import load
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)

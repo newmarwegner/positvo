@@ -1,28 +1,17 @@
-# Atividade final do módulo - EX06
+# Atividade final do módulo - EX07
 # Autor: Newmar Wegner, Paulo, Kleberson
 # Date: 23/05/2021
 
-# Desenvolver um classificador e validação cruzada com o arquivo BreastCancer
-from pickle import dump
-
-from imblearn.over_sampling import SMOTE
 import pandas as pd
 from sklearn import preprocessing, metrics
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.model_selection import train_test_split, cross_validate
-from collections import Counter
-import numpy as np
-
-
-# pd.set_option('display.max_rows', 500)
-# pd.set_option('display.max_columns', 500)
-# pd.set_option('display.width', 1000)
+from pickle import dump
+from imblearn.over_sampling import SMOTE
 
 
 # Function to normalize data considering Min Max Scaler sklearn
-
-
 def normalize_data_minmax(df):
     normalizer = preprocessing.MinMaxScaler()
     
@@ -33,7 +22,7 @@ def normalize_data_minmax(df):
 def normalize_data_dummies(df):
     return pd.get_dummies(df, prefix=df.columns)
 
-
+# Function to balance dataset
 def balance(attributes, classes):
     oversample = SMOTE()
     X, Y = oversample.fit_resample(attributes, classes)

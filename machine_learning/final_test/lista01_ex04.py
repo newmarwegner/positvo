@@ -5,7 +5,6 @@
 import pandas as pd
 from sklearn import preprocessing
 
-
 # Function to normalize data considering Min Max Scaler sklearn
 def normalize_data_minmax(df):
     normalizer = preprocessing.MinMaxScaler()
