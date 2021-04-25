@@ -13,6 +13,7 @@ from pickle import dump
 from imblearn.over_sampling import SMOTE
 from sklearn import preprocessing
 from sklearn.cluster import KMeans
+
 np.set_printoptions(suppress=True)
 
 pd.set_option('display.max_rows', 500)
@@ -71,13 +72,15 @@ def kmeans_inertial(x, steps):
     
     return distortions
 
+
 # Function to format input dataset and return classes, numerics and dummies
 def format_dataset(dataset):
     dataset = dataset.drop(columns='TBG').dropna().reset_index(drop=True)
     numerics = dataset[['age', 'TSH', 'T3', 'TT4', 'T4U', 'FTI']]
-    dummies = dataset.drop(list(numerics.columns)+['Class'], axis=1)
+    dummies = dataset.drop(list(numerics.columns) + ['Class'], axis=1)
     
     return dataset['Class'], numerics, dummies
+
 
 # Function to concat dataframes
 def concat_df(numerics_norm, dummies_norm, classes, num_columns):
@@ -102,7 +105,7 @@ if __name__ == '__main__':
     # When check out dr_normalize was verified the secondary_hypothyroid class with just one line/
     # This characteristics result in a error on SMOTE algorithm to balance, besides that this row was/
     # exclude from dataset
-    print(df_normalized['Class'].value_counts()) # show the counts of classes
+    # print(df_normalized['Class'].value_counts()) # show the counts of classes
     df_normalized = df_normalized.loc[df_normalized['Class'] != 'secondary_hypothyroid']
     
     # Balance dataset
@@ -114,5 +117,10 @@ if __name__ == '__main__':
     
     # Save Model with optimal clusters
     kmeansmodel = KMeans(n_clusters=opt, random_state=1).fit(df_balanced[0])
-    dump(kmeansmodel, open('./result_ft/modelcluster_hypothyroid.pkl','wb'))
-    print(kmeansmodel.cluster_centers_)
+    dump(kmeansmodel, open('./result_ft/modelcluster_hypothyroid.pkl', 'wb'))
+    
+    # Get cluster centers
+    cluster_centers = pd.DataFrame(kmeansmodel.cluster_centers_, columns=list(df_normalized.columns)[:-1])
+   
+    print(f'Centroides obtidos com {opt} Grupos')
+    print(cluster_centers)
