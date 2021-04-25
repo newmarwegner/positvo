@@ -2,10 +2,6 @@
 # Autor: Newmar Wegner, Paulo, Kleberson
 # Date: 23/05/2021
 
-
-# 2.3 Após obter o modelo, liste as características de cada grupo (listar os valores dos centroides), analise-as e descreva os grupos
-# 2.4 Sua análise pode ser realizada como comentário do programa ou como relatório gerencial. Opte pela forma que mais convier à equipe.
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
