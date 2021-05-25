@@ -2,7 +2,6 @@
 # Autor: Newmar Wegner
 # Date: 21/05/2021
 
-
 """
 1) Preparar dados
 2) Criar o modelo (input, output size, forward pass)
