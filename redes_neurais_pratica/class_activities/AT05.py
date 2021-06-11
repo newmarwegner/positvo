@@ -109,15 +109,15 @@ def classify_images(img_path_classify):
 
 if __name__ == '__main__':
     ##### Create model and get results ###########
-    # path_train = './data/cats_dogs/catdog_train'
-    # path_validation = './data/cats_dogs/catdog_validation'
-    # train_datagen, validation_datagen, train_generator, validation_generator = prepare_dataset(path_train,
-    #                                                                                            path_validation)
-    # model = create_model()
-    # model.summary()
-    # history = train_model(model, train_generator, validation_generator)
-    # acc, val_acc, loss, val_loss, epochs = evaluate_results(history)
-    # plot_results(epochs, acc, val_acc, loss, val_loss)
+    path_train = './data/cats_dogs/catdog_train'
+    path_validation = './data/cats_dogs/catdog_validation'
+    train_datagen, validation_datagen, train_generator, validation_generator = prepare_dataset(path_train,
+                                                                                               path_validation)
+    model = create_model()
+    model.summary()
+    history = train_model(model, train_generator, validation_generator)
+    acc, val_acc, loss, val_loss, epochs = evaluate_results(history)
+    plot_results(epochs, acc, val_acc, loss, val_loss)
     
     ###### Classify images with model saved ############
     # dimensions of our images
