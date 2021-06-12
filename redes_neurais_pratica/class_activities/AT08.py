@@ -10,6 +10,7 @@ https://www.kaggle.com/uciml/red-wine-quality-cortez-et-al-2009
 
 import pandas as pd
 import tensorflow as tf
+import matplotlib.pyplot as plt
 from keras import models, layers
 from tensorflow.keras.utils import to_categorical
 
@@ -27,20 +28,18 @@ print(train.quality.unique())
 train.insert(0, 'identificador', range(0, 0 + len(train)))
 train_set = train.sample(frac=0.7)
 test_set = train[train.identificador.isin(train_set.identificador) == False]
+
 # Labels to categorical
 train_label = to_categorical(train_set.quality)
 test_label = to_categorical(test_set.quality)
-#
+
 # Exclude columns  that not will be use
 train_set = train_set.iloc[:, 1:-1]
 test_set = test_set.iloc[:, 1:-1]
 
-
-
 # Convert to tensorflow datatype
 train_set = tf.convert_to_tensor(train_set, dtype=tf.int64)
 test_set = tf.convert_to_tensor(test_set, dtype=tf.int64)
-
 
 # print(test_set.shape)
 # print(train_set.shape)
@@ -48,7 +47,6 @@ test_set = tf.convert_to_tensor(test_set, dtype=tf.int64)
 # print(train_label.shape)
 # print(train_set)
 # # print(train_set)
-
 
 # Create model
 network = models.Sequential()
@@ -67,7 +65,6 @@ history = network.fit(train_set,
 
 test_loss, test_acc = network.evaluate(test_set, test_label)
 print('Test acurácia: ', test_acc)
-#
 
 '''
 Resultados
@@ -78,3 +75,28 @@ epochs=4000,
 Test acurácia:  0.7111111283302307
 
 '''
+##### Plots
+history_dict = history.history
+loss_values = history_dict['loss']
+val_loss_values = history_dict['val_loss']
+
+epochs = range(1, len(history_dict['loss']) + 1)
+
+plt.plot(epochs, loss_values, 'bo', label='Training Loss')
+plt.plot(epochs, val_loss_values, 'b', label='Validation Loss')
+plt.title("Training and Validation Loss")
+plt.xlabel("Epochs")
+plt.ylabel("Loss")
+plt.legend()
+plt.show()
+
+acc_values = history_dict['accuracy']
+val_acc_values = history_dict['val_accuracy']
+
+plt.plot(epochs, acc_values, 'bo', label='Training Acc')
+plt.plot(epochs, val_acc_values, 'b', label='Validation Acc')
+plt.title("Training and Validation Accuracy")
+plt.xlabel("Epochs")
+plt.ylabel("Accuracy")
+plt.legend()
+plt.show()

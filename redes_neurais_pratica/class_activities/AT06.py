@@ -11,8 +11,10 @@ https://www.kaggle.com/hesh97/titanicdataset-traincsv
 '''
 import pandas as pd
 import tensorflow as tf
+import matplotlib.pyplot as plt
 from keras import models, layers
 from tensorflow.keras.utils import to_categorical
+from tensorflow import keras
 
 pd.set_option('display.max_rows', 100)
 pd.set_option('display.max_columns', 500)
@@ -50,10 +52,12 @@ test_set = tf.convert_to_tensor(test_set, dtype=tf.int64)
 
 # Create model
 network = models.Sequential()
-network.add(layers.Dense(200, activation='relu', input_shape=(7,)))
+network.add(layers.Dense(500, activation='relu', input_shape=(7,)))
+network.add(layers.Dense(250, activation='relu'))
 network.add(layers.Dense(2, activation='softmax'))
 network.summary()
-network.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+opt = keras.optimizers.Adam(learning_rate=0.001)
+network.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
 
 print(train_set.shape)
 print('############################')
@@ -62,7 +66,6 @@ print('######################3')
 print(train_label.shape)
 print('############################')
 print(test_label.shape)
-#
 
 # Fit model
 history = network.fit(train_set,
@@ -88,3 +91,28 @@ epochs=1000,
 Test acurácia:  0.8130841255187988
 
 '''
+##### Plots
+history_dict = history.history
+loss_values = history_dict['loss']
+val_loss_values = history_dict['val_loss']
+
+epochs = range(1, len(history_dict['loss']) + 1)
+
+plt.plot(epochs, loss_values, 'bo', label='Training Loss')
+plt.plot(epochs, val_loss_values, 'b', label='Validation Loss')
+plt.title("Training and Validation Loss")
+plt.xlabel("Epochs")
+plt.ylabel("Loss")
+plt.legend()
+plt.show()
+
+acc_values = history_dict['accuracy']
+val_acc_values = history_dict['val_accuracy']
+
+plt.plot(epochs, acc_values, 'bo', label='Training Acc')
+plt.plot(epochs, val_acc_values, 'b', label='Validation Acc')
+plt.title("Training and Validation Accuracy")
+plt.xlabel("Epochs")
+plt.ylabel("Accuracy")
+plt.legend()
+plt.show()

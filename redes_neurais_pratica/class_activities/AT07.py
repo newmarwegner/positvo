@@ -12,6 +12,7 @@ o	Epocas;
 
 import pandas as pd
 import tensorflow as tf
+import matplotlib.pyplot as plt
 from keras import models, layers
 from tensorflow.keras.utils import to_categorical
 
@@ -43,17 +44,16 @@ test_set = tf.convert_to_tensor(test_set, dtype=tf.int64)
 
 # Create model
 network = models.Sequential()
-network.add(layers.Dense(20, activation='relu', input_shape=(12,)))
-network.add(layers.Dense(30, activation='relu'))
+network.add(layers.Dense(2000, activation='relu', input_shape=(12,)))
 network.add(layers.Dense(2, activation='softmax'))
 network.summary()
-network.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+network.compile(optimizer='adam',  loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Fit model
 history = network.fit(train_set,
                       train_label,
-                      batch_size=50,
-                      epochs=4000,
+                      batch_size=168,
+                      epochs=2000,
                       validation_data=(test_set, test_label))
 
 test_loss, test_acc = network.evaluate(test_set, test_label)
@@ -75,3 +75,28 @@ epochs=4000,
 Test acurácia:  0.7111111283302307
 
 '''
+##### Plots
+history_dict = history.history
+loss_values = history_dict['loss']
+val_loss_values = history_dict['val_loss']
+
+epochs = range(1, len(history_dict['loss']) + 1)
+
+plt.plot(epochs, loss_values, 'bo', label='Training Loss')
+plt.plot(epochs, val_loss_values, 'b', label='Validation Loss')
+plt.title("Training and Validation Loss")
+plt.xlabel("Epochs")
+plt.ylabel("Loss")
+plt.legend()
+plt.show()
+
+acc_values = history_dict['accuracy']
+val_acc_values = history_dict['val_accuracy']
+
+plt.plot(epochs, acc_values, 'bo', label='Training Acc')
+plt.plot(epochs, val_acc_values, 'b', label='Validation Acc')
+plt.title("Training and Validation Accuracy")
+plt.xlabel("Epochs")
+plt.ylabel("Accuracy")
+plt.legend()
+plt.show()
