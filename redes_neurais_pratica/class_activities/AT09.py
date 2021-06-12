@@ -24,24 +24,19 @@ pd.set_option('display.width', 100)
 
 # Organize train dataset
 train = pd.read_csv('./data/voice.csv')
-
+train['label'] = train['label'].astype('category')
+train['label'] = train['label'].cat.codes
 # Get number of unique values
 print(train.label.unique())
-
+train = train.dropna()
 # Create Train and test dataset
 train.insert(0, 'identificador', range(0, 0 + len(train)))
 train_set = train.sample(frac=0.7)
 test_set = train[train.identificador.isin(train_set.identificador) == False]
-# # Labels to categorical
-label_train = np.array(train_set.iloc[:, -1:].values.ravel())
-label_encoder = LabelEncoder()
-train_setlabel = label_encoder.fit_transform(label_train)
-train_label = to_categorical(train_setlabel)
 
-label_test = np.array(test_set.iloc[:, -1:].values.ravel())
-label_encoder = LabelEncoder()
-test_setlabel = label_encoder.fit_transform(label_test)
-test_label = to_categorical(test_setlabel)
+# Labels to categorical
+train_label = to_categorical(train_set.label)
+test_label = to_categorical(test_set.label)
 
 # Exclude columns  that not will be use
 train_set = train_set.iloc[:, 1:-1]
@@ -69,7 +64,7 @@ network.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc
 history = network.fit(train_set,
                       train_label,
                       batch_size=168,
-                      epochs=1000,
+                      epochs=600,
                       validation_data=(test_set, test_label))
 
 test_loss, test_acc = network.evaluate(test_set, test_label)

@@ -12,6 +12,7 @@ import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from keras import models, layers
+from keras.regularizers import l2
 from tensorflow.keras.utils import to_categorical
 
 pd.set_option('display.max_rows', 50)
@@ -50,17 +51,17 @@ test_set = tf.convert_to_tensor(test_set, dtype=tf.int64)
 
 # Create model
 network = models.Sequential()
-network.add(layers.Dense(20, activation='relu', input_shape=(11,)))
-network.add(layers.Dense(30, activation='relu'))
+network.add(layers.Dense(50, activation='relu', input_shape=(11,), activity_regularizer=l2(0.001)))
+network.add(layers.Dense(20, activation='relu', activity_regularizer=l2(0.001)))
 network.add(layers.Dense(9, activation='softmax'))
 network.summary()
-network.compile(optimizer='SGD', loss='categorical_crossentropy', metrics=['accuracy'])
+network.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Fit model
 history = network.fit(train_set,
                       train_label,
                       batch_size=50,
-                      epochs=4000,
+                      epochs=300,
                       validation_data=(test_set, test_label))
 
 test_loss, test_acc = network.evaluate(test_set, test_label)
