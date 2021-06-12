@@ -33,17 +33,18 @@ train_label = to_categorical(train_set.DEATH_EVENT)
 test_label = to_categorical(test_set.DEATH_EVENT)
 #
 # Exclude columns  that not will be use
-train_set = train_set.iloc[:, 1:]
-test_set = test_set.iloc[:, 1:]
+train_set = train_set.iloc[:, 1:-1]
+test_set = test_set.iloc[:, 1:-1]
 
+# print(train_set)
 # Convert to tensorflow datatype
 train_set = tf.convert_to_tensor(train_set, dtype=tf.int64)
 test_set = tf.convert_to_tensor(test_set, dtype=tf.int64)
 
 # Create model
 network = models.Sequential()
-network.add(layers.Dense(100, activation='relu', input_shape=(13,)))
-network.add(layers.Dense(100, activation='relu'))
+network.add(layers.Dense(20, activation='relu', input_shape=(12,)))
+network.add(layers.Dense(30, activation='relu'))
 network.add(layers.Dense(2, activation='softmax'))
 network.summary()
 network.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
@@ -51,7 +52,7 @@ network.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc
 # Fit model
 history = network.fit(train_set,
                       train_label,
-                      batch_size=100,
+                      batch_size=50,
                       epochs=4000,
                       validation_data=(test_set, test_label))
 

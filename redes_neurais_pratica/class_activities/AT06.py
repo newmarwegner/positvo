@@ -42,6 +42,7 @@ test_label = to_categorical(test_set.Survived)
 # Exclude columns  that not will be use
 train_set = train_set.iloc[:, 2:]
 test_set = test_set.iloc[:, 2:]
+print(train_set)
 
 # Convert to tensorflow datatype
 train_set = tf.convert_to_tensor(train_set, dtype=tf.int64)
@@ -61,18 +62,18 @@ print('######################3')
 print(train_label.shape)
 print('############################')
 print(test_label.shape)
-
-
-# # Fit model
-# history = network.fit(train_set,
-#                       train_label,
-#                       batch_size=128,
-#                       epochs=2000,
-#                       validation_data=(test_set, test_label))
 #
-# test_loss, test_acc = network.evaluate(test_set, test_label)
-# print('Test acurácia: ', test_acc)
-#
+
+# Fit model
+history = network.fit(train_set,
+                      train_label,
+                      batch_size=128,
+                      epochs=2000,
+                      validation_data=(test_set, test_label))
+
+test_loss, test_acc = network.evaluate(test_set, test_label)
+print('Test acurácia: ', test_acc)
+
 
 '''
 Resultados
